@@ -7,6 +7,8 @@ use App\Billing\CreditPaymentGateway;
 use App\Billing\PaymentGatewayContract;
 use App\Channel;
 use App\Http\View\Composers\ChannelsComposer;
+use App\PostcardSendingService;
+use function foo\func;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -24,6 +26,10 @@ class AppServiceProvider extends ServiceProvider
                 return new CreditPaymentGateway('USD');
             }
             return new BankPaymentGateway('USD');
+        });
+        $this->app->singleton('Postcard', function($app) {
+            return new PostcardSendingService('USA',4,6);
+
         });
     }
 
