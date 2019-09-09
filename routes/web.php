@@ -2,9 +2,11 @@
 
 use App\Postcard;
 use App\PostcardSendingService;
+use Illuminate\Support\Str;
 
 Route::get('/', function () {
-    return view('welcome');
+//    return \Illuminate\Support\Facades\Response::errorJson();
+    dd(Str::prefix('123TEst'));
 });
 
 Route::get('pay','PayOrderController@store');
@@ -22,3 +24,4 @@ Route::get('postcards', function () {
 Route::get('/facades', function () {
         Postcard::hello('Hello from facade','test@test.com');
 });
+

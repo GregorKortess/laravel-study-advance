@@ -7,10 +7,13 @@ use App\Billing\CreditPaymentGateway;
 use App\Billing\PaymentGatewayContract;
 use App\Channel;
 use App\Http\View\Composers\ChannelsComposer;
+use App\Mixins\StrMixins;
 use App\PostcardSendingService;
 use function foo\func;
+use Illuminate\Routing\ResponseFactory;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -27,8 +30,8 @@ class AppServiceProvider extends ServiceProvider
             }
             return new BankPaymentGateway('USD');
         });
-        $this->app->singleton('Postcard', function($app) {
-            return new PostcardSendingService('USA',4,6);
+        $this->app->singleton('Postcard', function ($app) {
+            return new PostcardSendingService('USA', 4, 6);
 
         });
     }
@@ -41,6 +44,16 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
 
+        Str::mixin(new StrMixins());
+
+        ResponseFactory::macro('errorJson', function($message = "Default error message") {
+            return [
+                'message' => $message,
+                'error_code' => 123,
+            ];
+        });
+
+
         // Option-1 Every single view
         // View::share('channels',Channel::orderBy('name')->get());
 
@@ -50,6 +63,6 @@ class AppServiceProvider extends ServiceProvider
 //        });
 
         // Option-3 Dedicated class\
-        View::composer(['partials.channels.*'],ChannelsComposer::class);
+        View::composer(['partials.channels.*'], ChannelsComposer::class);
     }
 }

@@ -12,4 +12,5 @@ class ChannelController extends Controller
 
         return view('channel.index');
     }
+
 }
